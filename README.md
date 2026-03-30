@@ -1,15 +1,15 @@
-API REST de cadastro desenvolvida com Node.js, Express e MySQL.
+# API REST de cadastro desenvolvida com Node.js, Express e MySQL (Em desenvolvimento)
 
-Sobre o projeto
-Este projeto é uma API REST criada com o objetivo de aprender e praticar Node.js e SQL na prática. A API permite realizar operações de cadastro em um banco de dados MySQL, seguindo o padrão CRUD (Create, Read, Update, Delete) - Ele esta em desenvolvimento no momento
+## Sobre o projeto
+Este projeto é uma API REST criada com o objetivo de aprender e praticar Node.js e SQL na prática. A API permite realizar operações de cadastro em um banco de dados MySQL, seguindo o padrão CRUD (Create, Read, Update, Delete)
 
-Tecnologias utilizadas
+## Tecnologias utilizadas
 * Node.js
 * Express
 * MySQL
 * dotenv
 
-Funcionalidades
+## Funcionalidades
 * Cadastrar registros
 * Listar registros
 * Atualizar registros
