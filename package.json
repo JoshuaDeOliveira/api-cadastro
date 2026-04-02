@@ -1,7 +1,26 @@
 {
+  "name": "api-cadastro",
+  "version": "1.0.0",
+  "description": "'Projeto de criação de uma API para cadastro de usuarios'",
+  "homepage": "https://github.com/JoshuaDeOliveira/api-cadastro#readme",
+  "bugs": {
+    "url": "https://github.com/JoshuaDeOliveira/api-cadastro/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoshuaDeOliveira/api-cadastro.git"
+  },
+  "license": "ISC",
+  "author": "Joshua E Oliveira",
+  "type": "module",
+  "main": "API.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "dotenv": "^17.4.0",
     "express": "^5.2.1",
     "mysql2": "^3.20.0"
-  }
+  },
+  "devDependencies": {}
 }
