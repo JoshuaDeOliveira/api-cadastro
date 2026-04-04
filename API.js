@@ -60,12 +60,24 @@ async function API(){
             res.status(200).send('Usuario deletado!')
         })
 
-        app.put('/atualizarusuario', async (req, res) => { //Ainda esta sendo feito
+        app.put('/atualizarusuario', async (req, res) => {
             const iduser = req.body.id
+            const NomeUser = req.body.nome
+            const SobrenomeUser =  req.body.sobrenome
+            const SenhaUser = req.body.senha_hash
+            const IdadeUser = req.body.idade
+            const EmailUser = req.body.email
+            const CpfUser = req.body.cpf
+            const CelularUser = req.body.celular
+            const EndereçoUser = req.body.endereço_completo
 
             await pool.query(
-
+                `UPDATE usuarios
+                SET nome = ?, sobrenome = ?, senha_hash = ?, idade = ?, email = ?, cpf = ?, celular = ?, endereço_completo = ?
+                WHERE id = ?`, [NomeUser, SobrenomeUser, SenhaUser, IdadeUser, EmailUser, CpfUser, CelularUser, EndereçoUser, iduser]
             )
+
+            res.status(200).send('Usuario Atualizado')
         })
 
     } catch (err) {
