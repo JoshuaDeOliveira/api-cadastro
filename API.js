@@ -7,7 +7,8 @@ const app = Express()
 const port = 3000
 
 app.use(Express.json());
-app.use('/', rotas)
+app.use('/usuarios', rotas)
+
 const Statusdb = await TesteConexao()
 
 if (Statusdb) {
