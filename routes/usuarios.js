@@ -5,22 +5,26 @@ const rotas = Express.Router()
 
 rotas.get('/', async (req, res) => {
     try {
-        const [Respostas] = await pool.query(
+        const [respostas] = await pool.query(
             `SELECT id, nome, sobrenome, idade, email, celular, endereço_completo, cpf, created_at, updated_at
             FROM usuarios`
         )
 
-        const Usuarios = {
-            sucess: true,
-            users: Respostas,
-            total: Respostas.length
-        }
+        const usuarios = respostas.length === 0 ? {
+            success: true,
+            system_msg: 'Nenhum usuario encontrado! Por favor, cadastrar um usuario novo!',
+        } : {
+            success: true,
+            users: respostas,
+            total: respostas.length
+        };
 
-        res.json(Usuarios)
+        res.json(usuarios)
     } catch (err) {
         const erro = {
-            sucess: false,
-            message: 'Erro interno do servidor'
+            success: false,
+            message: 'Erro interno do servidor',
+            error: err.message
         }
         
         res.status(500).json(erro)
@@ -78,38 +82,70 @@ rotas.delete('/deletarusuario/:id', async (req, res) => {
     try {
         const iduser = req.params.id
 
-        await pool.query(
+        const query = await pool.query(
             `DELETE FROM usuarios WHERE id = ?`, [iduser]
         )
 
-        res.status(200).send('Usuario deletado!')
+        const affectedRows = query[0].affectedRows
+
+        const systemMsg = affectedRows === 0 ? 
+        {success: false,status: 404 , message: 'Usuario não localizado'} 
+        : 
+        {success: true,status: 200 , message: 'Usuario deletado com sucesso!'};
+        
+        res.status(systemMsg.status).json(systemMsg)
     } catch {
         const Erro = {
-            sucess: false,
-            message: 'Usuario não encontrado'
+            success: false,
+            message: 'Houve um erro ao deletar o usuario! Por favor, verifique a estabilidade do banco ou o pedido solicitado',
+            error: err.message
         }
-        res.status(404).send(Erro)
+        res.status(500).json(Erro)
     }
 })
 
-rotas.put('/atualizarusuario', async (req, res) => {
-    const iduser = req.body.id
-    const NomeUser = req.body.nome
-    const SobrenomeUser =  req.body.sobrenome
-    const SenhaUser = req.body.senha_hash
-    const IdadeUser = req.body.idade
-    const EmailUser = req.body.email
-    const CpfUser = req.body.cpf
-    const CelularUser = req.body.celular
-    const EndereçoUser = req.body.endereço_completo
+rotas.put('/atualizarusuario', async (req, res) => { //Anotação de desenvolvimento: Seguir a construção da rota de atualização de usuario
+    try{
+        const iduser = req.body.id
+        const NomeUser = req.body.nome
+        const SobrenomeUser =  req.body.sobrenome
+        const SenhaUser = req.body.senha_hash
+        const IdadeUser = req.body.idade
+        const EmailUser = req.body.email
+        const CpfUser = req.body.cpf
+        const CelularUser = req.body.celular
+        const EndereçoUser = req.body.endereço_completo
 
-    await pool.query(
-        `UPDATE usuarios
-        SET nome = ?, sobrenome = ?, senha_hash = ?, idade = ?, email = ?, cpf = ?, celular = ?, endereço_completo = ?
-        WHERE id = ?`, [NomeUser, SobrenomeUser, SenhaUser, IdadeUser, EmailUser, CpfUser, CelularUser, EndereçoUser, iduser]
-    )
+        const Query = await pool.query(
+            `UPDATE usuarios
+            SET nome = ?, sobrenome = ?, senha_hash = ?, idade = ?, email = ?, cpf = ?, celular = ?, endereço_completo = ?
+            WHERE id = ?`, [NomeUser, SobrenomeUser, SenhaUser, IdadeUser, EmailUser, CpfUser, CelularUser, EndereçoUser, iduser]
+        )
 
-    res.status(200).send('Usuario Atualizado')
+        const affectedRows = Query[0].affectedRows
+
+        const SystemMsg = affectedRows === 0 ? {
+            success: false,
+            status: 404,
+            message: 'Usuario não encontrado'
+        } 
+        : 
+        {
+            success: true,
+            status: 200,
+            message: 'Usuario atualizado com sucesso'
+        };
+
+        res.status(SystemMsg.status).json(SystemMsg)
+    } catch (err) {
+        const Error = {
+            success: false,
+            message: 'Houve um erro',
+            error: err.message
+        }
+
+        res.status(500).json(Error)
+    }
 })
 
 export default rotas
